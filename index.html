@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#000000">
+<title>Revolut Demo</title>
+<style>
+:root{--bg:#000;--c:#191c1f;--c2:#25292d;--m:#8d969e;--b:#0666eb;--g:#00a87e;--r:#ec5b62;--gl:rgba(32,35,38,.62)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:15px}
+html,body{margin:0;height:100%;background:var(--bg);color:#fff;font-family:"Inter",-apple-system,"SF Pro Display",Segoe UI,Roboto,sans-serif;overflow:hidden}
+#app{height:100%;max-width:480px;margin:auto;position:relative;overflow:hidden}
+.scr{position:absolute;inset:0;overflow-y:auto;padding:calc(env(safe-area-inset-top) + .8rem) 1rem 7rem;animation:fin .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes fin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+svg{display:block;flex:none}.i{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.row{display:flex;align-items:center;gap:.8rem}.sp{justify-content:space-between}
+.av{width:2.6rem;height:2.6rem;border-radius:50%;background:var(--c2);display:grid;place-items:center;font-weight:600;flex:none}
+.top{display:flex;align-items:center;gap:.6rem;margin-bottom:1.6rem}
+.srch{flex:1;background:var(--c);border-radius:99px;padding:.7rem 1rem;color:var(--m);display:flex;gap:.5rem;align-items:center}
+.bal{text-align:center;margin:.4rem 0 1.4rem}
+.bal small{color:var(--m);font-size:.95rem}
+.bal h1{font-size:3.2rem;font-weight:600;margin:.2rem 0 .8rem;letter-spacing:-1.5px}
+.pill{display:inline-block;background:var(--c);border-radius:99px;padding:.55rem 1.1rem;font-weight:600;font-size:.95rem}
+.acts{display:flex;justify-content:space-around;margin:0 0 1.6rem}
+.acts div{text-align:center;font-size:.85rem;font-weight:500;width:5rem}
+.cir{width:3.4rem;height:3.4rem;border-radius:50%;background:var(--c);display:grid;place-items:center;margin:0 auto .5rem;transition:transform .15s,background .2s}
+.cir:active,.press:active{transform:scale(.92);background:var(--c2)}
+.card{background:var(--c);border-radius:1.3rem;padding:1rem;margin-bottom:1rem}
+.card h3{margin:0 0 .6rem;font-size:1.1rem;font-weight:600}
+.tx{display:flex;align-items:center;gap:.8rem;padding:.7rem 0}
+.tx .n{font-weight:500}.tx .d{color:var(--m);font-size:.85rem;margin-top:.1rem}.tx .a{margin-left:auto;text-align:right;font-weight:500}
+.pos{color:var(--g)}.neg{color:#fff}.dn{color:var(--r)}
+.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.hd h2{margin:0;font-size:2rem;font-weight:600;letter-spacing:-.5px}
+.tab{position:fixed;bottom:calc(env(safe-area-inset-bottom) + .7rem);left:50%;transform:translateX(-50%);width:calc(100% - 1.6rem);max-width:440px;display:flex;padding:.55rem .3rem;background:var(--gl);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid rgba(255,255,255,.12);border-radius:2rem;box-shadow:0 10px 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);z-index:5}
+.tab div{flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem;font-size:.75rem;color:var(--m);padding:.35rem 0;border-radius:1.4rem;transition:.25s}
+.tab .on{color:#fff;background:rgba(255,255,255,.1)}
+.fld{background:var(--c);border-radius:1rem;padding:.7rem 1rem;margin-bottom:.8rem;border:1.5px solid transparent;transition:border .2s}
+.fld:focus-within{border-color:var(--b)}
+.fld label{display:block;font-size:.8rem;color:var(--m)}
+.fld input,.fld select{width:100%;background:none;border:0;outline:0;color:#fff;font-size:1.1rem;padding:.2rem 0;font-family:inherit}
+.fld select option{background:#222}
+.btn{width:100%;padding:1.05rem;border:0;border-radius:99px;background:var(--b);color:#fff;font-size:1.05rem;font-weight:600;font-family:inherit;transition:transform .15s,opacity .2s;margin-top:.3rem}
+.btn:active{transform:scale(.97);opacity:.85}.btn.g{background:var(--c2)}.btn.w{background:#fff;color:#000}
+.logo{font-size:2.6rem;font-weight:800;letter-spacing:-2px;margin:2.5rem 0 1rem}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fo .25s}
+@keyframes fo{from{opacity:0}}
+.sh{width:100%;max-width:480px;background:var(--gl);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:1.8rem 1.8rem 0 0;padding:.6rem 1rem calc(env(safe-area-inset-bottom) + 1.2rem);border-top:1px solid rgba(255,255,255,.18);animation:su .4s cubic-bezier(.2,.9,.25,1);max-height:88%;overflow-y:auto}
+@keyframes su{from{transform:translateY(100%)}}
+.sh .gr{width:2.6rem;height:.3rem;border-radius:9px;background:rgba(255,255,255,.3);margin:.2rem auto 1rem}
+.sh h2{margin:0 0 1rem;font-size:1.5rem}
+.kv{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 0;border-bottom:1px solid rgba(255,255,255,.08)}.kv span:first-child{color:var(--m)}.kv span:last-child{text-align:right;overflow-wrap:anywhere}
+.tog{width:3.2rem;height:1.9rem;border-radius:99px;background:#3a3f44;position:relative;transition:.25s;flex:none}
+.tog:after{content:"";position:absolute;top:.2rem;left:.2rem;width:1.5rem;height:1.5rem;border-radius:50%;background:#fff;transition:.25s}
+.tog.on{background:var(--b)}.tog.on:after{left:1.5rem}
+#toast{position:fixed;top:calc(env(safe-area-inset-top) + .6rem);left:50%;transform:translate(-50%,-150px);padding:.8rem 1.3rem;z-index:40;transition:.45s cubic-bezier(.2,.9,.25,1);font-weight:500;background:var(--gl);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.18);border-radius:99px;max-width:92%;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+.vc{height:11rem;border-radius:1.3rem;padding:1.2rem;position:relative;background:linear-gradient(135deg,#0666eb,#7b3fe4 60%,#e23b9a);box-shadow:0 14px 40px rgba(80,60,230,.35);transition:filter .3s,opacity .3s;overflow:hidden;margin-bottom:1rem}
+.vc:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);animation:sh 4s infinite}
+@keyframes sh{40%,100%{transform:translateX(100%)}}
+.vc.fz{filter:grayscale(1) brightness(.6)}
+.ok{width:6rem;height:6rem;border-radius:50%;background:var(--g);display:grid;place-items:center;margin:3rem auto 1rem;animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{transform:scale(0)}}
+.chips{display:flex;gap:.5rem;margin-bottom:1rem;overflow-x:auto}.chips span{padding:.5rem 1rem;border-radius:99px;background:var(--c);font-weight:500;flex:none}.chips .on{background:#fff;color:#000}
+.m{color:var(--m)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+let DB={users:{}};try{DB=JSON.parse(localStorage.rv||'null')||DB}catch(e){}
+const save=()=>{try{localStorage.rv=JSON.stringify(DB)}catch(e){}};
+let me=null,view='login',tab='home',cur='EUR',cat='all';
+const SY={EUR:'€',USD:'$',GBP:'£'},RT={EUR:1,USD:1.08,GBP:.85};
+const P={home:'<path d="M3 11l9-8 9 8v10H3z"/>',card:'<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19"/>',inv:'<path d="M3 20h18M5 16l4-5 4 3 6-8"/>',usr:'<circle cx="12" cy="8" r="4"/><path d="M4 21c.5-4.500 3.500-6.500 8-6.500s7.500 2 8 6.500z"/>',add:'<path d="M12 5v14M5 12h14"/>',mov:'<path d="M4 8h16l-4-4M20 16H4l4 4"/>',snd:'<path d="M5 19L19 5M9 5h10v10"/>',dt:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.500v.1"/>',srch:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',chk:'<path d="M5 12.500l5 5 9-11" stroke-width="2.500"/>'};
+const ico=(n,s=24)=>`<svg class="i" width="${s}" height="${s}" viewBox="0 0 24 24">${P[n]}</svg>`;
+const eur=(n,c='EUR')=>(n<0?'−':'')+Math.abs(n).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+SY[c];
+const num=s=>parseFloat(String(s).replace(/\./g,'').replace(',','.'));
+const val=id=>(($('#'+id)||{}).value||'');
+const rnd=n=>Array.from({length:n},()=>Math.floor(Math.random()*10)).join('');
+const U=()=>DB.users[me];
+const dstr=t=>{const d=new Date(t);return d.toLocaleDateString('de-DE',{day:'numeric',month:'long'})+', '+d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})};
+const COL=['#0666eb','#7b3fe4','#e23b9a','#00a87e','#f08c00','#ec5b62'];
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t.h);t.h=setTimeout(()=>t.classList.remove('show'),2400)}
+function sheet(h){close_();const o=document.createElement('div');o.className='ov';o.id='ov';o.innerHTML=`<div class="sh"><div class="gr"></div>${h}</div>`;o.onclick=e=>{if(e.target===o)close_()};document.body.appendChild(o)}
+function close_(){const o=$('#ov');if(o)o.remove()}
+function count(el,to){const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);el.textContent=eur(to*e,cur);if(k<1)requestAnimationFrame(f)})(t0)}
+const go=(v,t)=>{view=v;if(t)tab=t;render()};
+const fld=(id,l,v,ex)=>`<div class="fld"><label>${l}</label><input id="${id}" value="${v||''}" ${ex||''}></div>`;
+function render(){
+ if(view==='login'){app.innerHTML=`<div class="scr"><div class="logo">Revolut</div><div class="m" style="margin-bottom:2rem">Demo · Alle Daten bleiben lokal auf deinem Gerät.</div>${fld('ln','Benutzername','','autocapitalize="off"')}${fld('lp','PIN','','type="password" inputmode="numeric" onkeydown="if(event.key===\'Enter\')login()"')}<button class="btn" onclick="login()">Anmelden</button><button class="btn g" onclick="go('reg')">Konto erstellen</button></div>`;return}
+ if(view==='reg'){app.innerHTML=`<div class="scr"><div class="logo" style="font-size:2rem">Konto erstellen</div>${fld('rn','Vor- und Nachname')}${fld('rl','Benutzername','','autocapitalize="off"')}${fld('rp','PIN (min. 4 Ziffern)','','type="password" inputmode="numeric"')}${fld('rp2','PIN wiederholen','','type="password" inputmode="numeric"')}<button class="btn" onclick="reg()">Registrieren</button><button class="btn g" onclick="go('login')">Zurück</button></div>`;return}
+ app.innerHTML=`<div class="scr" id="sc">${({home,card:cards,inv:invest,usr:prof})[tab]()}</div><div class="tab">${[['home','Start'],['card','Karten'],['inv','Invest'],['usr','Profil']].map(t=>`<div class="${tab===t[0]?'on':''}" onclick="go('app','${t[0]}')">${ico(t[0],24)}${t[1]}</div>`).join('')}</div>`;
+ const b=$('#bv');if(b)count(b,bal(cur));
+}
+function reg(){const n=val('rn').trim(),l=val('rl').trim().toLowerCase(),p=val('rp');
+ if(!n||!l)return toast('Bitte alle Felder ausfüllen');if(DB.users[l])return toast('Benutzername vergeben');
+ if(!/^\d{4,}$/.test(p))return toast('PIN: mindestens 4 Ziffern');if(p!==val('rp2'))return toast('PINs stimmen nicht überein');
+ DB.users[l]={name:n,pin:p,iban:'DE'+rnd(2)+'1001'+rnd(14),bal:{EUR:0,USD:0,GBP:0},tx:[],frozen:false,pos:{},save:0};me=l;save();toast('Willkommen, '+n.split(' ')[0]);go('app','home')}
+function login(){const l=val('ln').trim().toLowerCase(),u=DB.users[l];if(!u||u.pin!==val('lp'))return toast('Benutzername oder PIN falsch');me=l;go('app','home')}
+const bal=c=>Math.round(U().bal[c]*100)/100;
+function addTx(n,a,c,k){U().tx.unshift({t:Date.now(),n,a,c,k});save()}
+function home(){const u=U(),ini=u.name.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();
+ const l=u.tx.filter(t=>cat==='all'||(cat==='in'?t.a>0:t.a<0));
+ return `<div class="top"><div class="av" onclick="go('app','usr')">${ini}</div><div class="srch">${ico('srch',18)}Suchen</div><div class="av" onclick="go('app','card')">${ico('card',20)}</div></div>
+ <div class="bal"><small>Privat · ${cur}</small><h1 id="bv">${eur(0,cur)}</h1><span class="pill press" onclick="accs()">Konten</span></div>
+ <div class="acts"><div onclick="addM()"><div class="cir">${ico('add',26)}</div>Hinzufügen</div><div onclick="exch()"><div class="cir">${ico('mov',26)}</div>Umtauschen</div><div onclick="send()"><div class="cir">${ico('snd',26)}</div>Senden</div><div onclick="det()"><div class="cir">${ico('dt',26)}</div>Details</div></div>
+ <div class="card press" onclick="pocket()"><div class="row sp"><div class="row"><div class="av" style="background:#0666eb">🐷</div><div><b>Sparen</b><div class="m" style="font-size:.85rem">Pocket · 2,1 % p.a. (Demo)</div></div></div><b>${eur(u.save)}</b></div></div>
+ <div class="card"><h3>Transaktionen</h3><div class="chips">${[['all','Alle'],['in','Eingänge'],['out','Ausgänge']].map(c=>`<span class="${cat===c[0]?'on':''}" onclick="cat='${c[0]}';render()">${c[1]}</span>`).join('')}</div>${l.map(t=>`<div class="tx"><div class="av" style="background:${COL[t.n.length%6]}">${t.n[0].toUpperCase()}</div><div><div class="n">${t.n}</div><div class="d">${dstr(t.t)}</div></div><div class="a ${t.a>0?'pos':''}">${t.a>0?'+':''}${eur(t.a,t.c)}</div></div>`).join('')||'<div class="m" style="text-align:center;padding:1.5rem 0">Noch keine Transaktionen.<br>Tippe auf Hinzufügen, um zu starten.</div>'}</div>`}
+function accs(){sheet(`<h2>Konten</h2>${Object.keys(SY).map(c=>`<div class="tx press" onclick="cur='${c}';close_();render()"><div class="av">${SY[c]}</div><div><div class="n">${c}</div><div class="d">Hauptkonto</div></div><div class="a">${eur(bal(c),c)}</div></div>`).join('')}`)}
+function addM(){sheet(`<h2>Geld hinzufügen</h2><div class="m" style="margin-bottom:1rem">Demo-Einzahlung in ${cur}. Es wird kein echtes Geld bewegt.</div>${fld('am','Betrag','50','inputmode="decimal"')}<button class="btn" onclick="topUp()">Hinzufügen</button>`)}
+function topUp(){const a=Math.abs(num(val('am')));if(!a||a>10000)return toast('Betrag bis 10.000 angeben');U().bal[cur]+=a;addTx('Demo-Einzahlung',a,cur,'in');close_();toast(eur(a,cur)+' hinzugefügt');render()}
+function send(){sheet(`<h2>Senden</h2>${fld('sn','Name des Empfängers')}${fld('si','IBAN','','placeholder="DE00 0000 0000 0000 0000 00"')}${fld('sa','Betrag in '+cur,'','inputmode="decimal"')}${fld('sz','Referenz')}<button class="btn" onclick="doSend()">Senden</button>`)}
+function doSend(){const a=Math.abs(num(val('sa'))),n=val('sn').trim();if(!n||!a)return toast('Name und Betrag angeben');
+ if(!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(val('si').replace(/\s/g,'').toUpperCase()))return toast('IBAN ungültig');
+ if(bal(cur)<a)return toast('Nicht genügend Guthaben');pin(()=>{U().bal[cur]-=a;addTx(n,-a,cur,'out');done(eur(a,cur)+' an '+n+' gesendet')})}
+function exch(){const o=Object.keys(SY);sheet(`<h2>Umtauschen</h2><div class="fld"><label>Von</label><select id="ef">${o.map(c=>`<option ${c===cur?'selected':''}>${c}</option>`).join('')}</select></div><div class="fld"><label>Nach</label><select id="et">${o.map((c,i)=>`<option ${i===1?'selected':''}>${c}</option>`).join('')}</select></div>${fld('ea','Betrag','','inputmode="decimal"')}<div class="m" style="margin:.2rem .3rem 1rem">Fester Demo-Kurs: 1 € = 1,08 $ = 0,85 £</div><button class="btn" onclick="doEx()">Umtauschen</button>`)}
+function doEx(){const f=val('ef'),t=val('et'),a=Math.abs(num(val('ea')));if(!a||f===t)return toast('Betrag und zwei Währungen wählen');if(bal(f)<a)return toast('Nicht genügend Guthaben');
+ const r=Math.round(a/RT[f]*RT[t]*100)/100;U().bal[f]-=a;U().bal[t]+=r;addTx(f+' → '+t,-a,f,'x');addTx(f+' → '+t,r,t,'x');close_();toast(eur(a,f)+' → '+eur(r,t));render()}
+function det(){const u=U();sheet(`<h2>Kontodetails</h2><div class="kv"><span>Inhaber</span><span>${u.name}</span></div><div class="kv"><span>IBAN</span><span>${u.iban.replace(/(.{4})/g,'$1 ').trim()}</span></div><div class="kv"><span>BIC</span><span>DEMODEXX</span></div><div class="kv"><span>Währung</span><span>${cur}</span></div><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText('${u.iban}');toast('IBAN kopiert')">IBAN kopieren</button>`)}
+function pocket(){sheet(`<h2>Sparen</h2><div style="font-size:2rem;font-weight:600;margin-bottom:1rem">${eur(U().save)}</div>${fld('pa','Betrag in EUR','','inputmode="decimal"')}<button class="btn" onclick="sv(1)">Einzahlen</button><button class="btn g" onclick="sv(-1)">Auszahlen</button>`)}
+function sv(d){const a=Math.abs(num(val('pa'))),u=U();if(!a)return toast('Betrag angeben');if(d>0&&u.bal.EUR<a)return toast('Nicht genügend Guthaben');if(d<0&&u.save<a)return toast('Nicht genügend Ersparnisse');u.bal.EUR-=d*a;u.save+=d*a;save();close_();toast('Pocket aktualisiert');render()}
+function pin(cb){sheet(`<h2>Bestätigen</h2><div class="m" style="margin-bottom:1rem">PIN eingeben</div>${fld('pc','PIN','','type="password" inputmode="numeric"')}<button class="btn" id="pk">Bestätigen</button>`);$('#pc').focus();$('#pk').onclick=()=>{if($('#pc').value===U().pin){cb()}else toast('PIN falsch')}}
+function done(m){sheet(`<div style="text-align:center"><div class="ok">${ico('chk',54)}</div><h2>Gesendet</h2><div class="m">${m}</div></div><button class="btn w" onclick="close_();render()" style="margin-top:1.5rem">Fertig</button>`)}
+function cards(){const u=U();return `<div class="hd"><h2>Karten</h2></div><div class="vc ${u.frozen?'fz':''}"><b style="font-size:1.3rem">Revolut</b><div style="position:absolute;bottom:3.4rem;font-size:1.25rem;letter-spacing:2px">•••• •••• •••• ${u.iban.slice(-4)}</div><div style="position:absolute;bottom:1.2rem">${u.name.toUpperCase()}</div><div style="position:absolute;right:1.2rem;bottom:1.2rem;font-weight:800;font-style:italic">VISA</div></div>
+ <div class="card"><div class="row sp"><div><b>Karte sperren</b><div class="m" style="font-size:.85rem">${u.frozen?'Zahlungen werden abgelehnt':'Karte ist aktiv'}</div></div><div class="tog ${u.frozen?'on':''}" onclick="U().frozen=!U().frozen;save();render()"></div></div></div>
+ <div class="card"><h3>Karte testen</h3>${fld('kn','Händler','REWE Markt')}${fld('ka','Betrag in EUR','12,50','inputmode="decimal"')}<button class="btn" onclick="pay()">Kartenzahlung simulieren</button></div>`}
+function pay(){const u=U(),a=Math.abs(num(val('ka'))),n=val('kn').trim();if(!a||!n)return toast('Händler und Betrag angeben');if(u.frozen)return toast('Karte ist gesperrt');if(u.bal.EUR<a)return toast('Nicht genügend Guthaben');u.bal.EUR-=a;addTx(n,-a,'EUR','card');toast('Zahlung bei '+n+' erfolgreich');render()}
+const SEC=[['Apple',231.2,3],['Tesla',312.5,7],['SAP',245.6,4],['NVIDIA',142.3,11],['MSCI World ETF',98.15,2],['Bitcoin',91800,13]];
+const px=x=>Math.round(x[1]*(1+.03*Math.sin(Date.now()/9e5+x[2]))*100)/100;
+function invest(){const u=U(),v=SEC.reduce((a,x)=>a+(u.pos[x[0]]||0)*px(x),0);
+ return `<div class="hd"><h2>Invest</h2></div><div class="card" style="text-align:center"><div class="m">Portfolio</div><div style="font-size:2.4rem;font-weight:600">${eur(v)}</div></div><div class="card"><h3>Aktien, ETFs und Krypto</h3>${SEC.map((x,i)=>{const c=Math.sin(Date.now()/9e5+x[2])*3;return `<div class="tx press" onclick="buy(${i})"><div class="av" style="background:${COL[i]}">${x[0][0]}</div><div><div class="n">${x[0]}</div><div class="d">${u.pos[x[0]]?u.pos[x[0]]+' Stk.':'Nicht im Besitz'}</div></div><div class="a">${eur(px(x))}<div class="d ${c>=0?'pos':'dn'}">${c>=0?'+':'−'}${Math.abs(c).toFixed(2).replace('.',',')} %</div></div></div>`}).join('')}</div>`}
+function buy(i){const x=SEC[i];sheet(`<h2>${x[0]}</h2><div style="font-size:2rem;font-weight:600;margin-bottom:1rem">${eur(px(x))}</div>${fld('bq','Stückzahl','1','inputmode="decimal"')}<button class="btn" onclick="trade(${i},1)">Kaufen</button><button class="btn g" onclick="trade(${i},-1)">Verkaufen</button>`)}
+function trade(i,d){const x=SEC[i],u=U(),q=num(val('bq')),p=px(x);if(!q||q<=0)return toast('Stückzahl angeben');const c=Math.round(q*p*100)/100;
+ if(d>0){if(u.bal.EUR<c)return toast('Nicht genügend Guthaben');u.bal.EUR-=c;u.pos[x[0]]=Math.round(((u.pos[x[0]]||0)+q)*1e4)/1e4;addTx('Kauf '+x[0],-c,'EUR','inv')}
+ else{if((u.pos[x[0]]||0)<q)return toast('Nicht genug Stücke');u.bal.EUR+=c;u.pos[x[0]]=Math.round((u.pos[x[0]]-q)*1e4)/1e4;addTx('Verkauf '+x[0],c,'EUR','inv')}
+ save();close_();toast('Order ausgeführt');render()}
+function prof(){const u=U();return `<div class="hd"><h2>Profil</h2></div><div class="card" style="text-align:center"><div class="av" style="width:5rem;height:5rem;font-size:1.8rem;margin:0 auto .8rem">${u.name[0]}</div><b style="font-size:1.3rem">${u.name}</b><div class="m">@${me}</div></div><div class="card">${fld('np','Neue PIN','','type="password" inputmode="numeric"')}<button class="btn g" onclick="chPin()">PIN ändern</button></div><button class="btn g" onclick="me=null;go('login')">Abmelden</button><button class="btn g" style="color:var(--r)" onclick="if(confirm('Zugang wirklich löschen?')){delete DB.users[me];save();me=null;go('login')}">Zugang löschen</button>`}
+function chPin(){const p=val('np');if(!/^\d{4,}$/.test(p))return toast('Mindestens 4 Ziffern');U().pin=p;save();toast('PIN geändert')}
+render();
+</script>
+</body>
+</html>
